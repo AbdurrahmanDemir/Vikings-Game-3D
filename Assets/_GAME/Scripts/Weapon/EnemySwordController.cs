@@ -10,6 +10,7 @@ public class EnemySwordController : MonoBehaviour
     [SerializeField] private LayerMask playerMask;
     [SerializeField] float weaponLength;
     [SerializeField] int weaponDamage;
+    [SerializeField] private GameObject damageParticle;
     // Start is called before the first frame update
     void Start()
     {
@@ -40,6 +41,8 @@ public class EnemySwordController : MonoBehaviour
                     health.TakeDamage(weaponDamage);
                     hasDealtDamage=true;
 
+                        DamageParticle(hit.point);
+
                     }
                 }
             }
@@ -49,6 +52,13 @@ public class EnemySwordController : MonoBehaviour
             }
         }
     }
+
+    public void DamageParticle(Vector3 pos)
+    {
+        GameObject particle = Instantiate(damageParticle, pos, Quaternion.identity);
+        Destroy(particle, 3f);
+    }
+
     public void OnDrawGizmos()
     {
         Debug.DrawRay(transform.position, -transform.up * weaponLength, Color.red);

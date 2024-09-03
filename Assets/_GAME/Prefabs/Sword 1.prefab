@@ -25,7 +25,7 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 875529754314119532}
-  m_LocalRotation: {x: 0.31953073, y: 0.65839046, z: 0.6209866, w: 0.28070956}
+  m_LocalRotation: {x: 0.31953076, y: 0.6583914, z: 0.6209851, w: 0.2807105}
   m_LocalPosition: {x: -0.076, y: -0.077, z: -0.009}
   m_LocalScale: {x: 1.0405116, y: 1.0405116, z: 1.0405116}
   m_ConstrainProportionsScale: 0
@@ -109,7 +109,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1730956466036151468}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.91, z: -0}
+  m_LocalPosition: {x: 0, y: 1.119, z: -0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -133,3 +133,5 @@ MonoBehaviour:
     m_Bits: 64
   weaponLength: 1
   weaponDamage: 30
+  damageParticle: {fileID: 3548588485384254792, guid: 2f9e7dc163581394da1e00b561eed65d,
+    type: 3}
