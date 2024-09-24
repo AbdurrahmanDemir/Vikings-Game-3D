@@ -34,6 +34,9 @@ public class EnemyController : MonoBehaviour
         player = GameObject.FindWithTag("Player");
         agent= GetComponent<NavMeshAgent>();
         animator= GetComponent<Animator>();
+
+
+        Debug.Log(player.name);
     }
 
     // Update is called once per frame
@@ -46,11 +49,19 @@ public class EnemyController : MonoBehaviour
         {
             if (Vector3.Distance(player.transform.position, transform.position) <= attackRange)
             {
+                agent.isStopped = true; // Hareketi durdur
+
                 animator.SetTrigger("attack");
                 timePassed = 0;
             }
+
         }
-        timePassed+=Time.deltaTime;
+        else
+        {
+            agent.isStopped = false; // Hareketi durdur
+            timePassed += Time.deltaTime;
+        }
+            
 
         if (newDestinationCD <= 0&& Vector3.Distance(player.transform.position, transform.position) <= aggroRange)
         {
@@ -58,7 +69,8 @@ public class EnemyController : MonoBehaviour
             agent.SetDestination(player.transform.position);
         }
         newDestinationCD -= Time.deltaTime;
-        transform.LookAt(player.transform);
+        if (agent.velocity.magnitude > 0)
+            transform.LookAt(player.transform);
 
     }
     public void StartDealDamage()

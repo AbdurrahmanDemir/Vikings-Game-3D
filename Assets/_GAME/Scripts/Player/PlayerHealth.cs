@@ -11,10 +11,18 @@ public class PlayerHealth : MonoBehaviour
     private int health;
     [SerializeField] private int maxHealth;
     [SerializeField] private Slider healthSlider;
+    PlayerStats stats;
 
+    GameManager gameManager;
+    private void Awake()
+    {
+        stats= GetComponent<PlayerStats>();
+        gameManager = GameObject.FindGameObjectWithTag("GameManager").GetComponent<GameManager>();
+    }
 
     private void Start()
     {
+       maxHealth= stats.maxHealth.GetValue();
         health = maxHealth;
         healthSlider.maxValue = maxHealth;
         healthSlider.value = health;
@@ -37,5 +45,7 @@ public class PlayerHealth : MonoBehaviour
     {
         Debug.Log("enemy öldü");
         Destroy(gameObject);
+
+        gameManager.GameLose();
     }
 }

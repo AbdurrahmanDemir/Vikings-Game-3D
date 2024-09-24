@@ -1,3 +1,5 @@
+using Cinemachine;
+using DG.Tweening;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -10,11 +12,12 @@ public class SwordController : MonoBehaviour
     [SerializeField] float weaponLength;
     [SerializeField] int weaponDamage;
     [SerializeField] private GameObject damageParticle;
-    // Start is called before the first frame update
+    public PlayerStats playerStats;
     void Start()
     {
         PlayerAttack.canDealDamage = false;
         hasDealtDamage = new List<GameObject>();
+        //playerStats = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerStats>();
     }
 
     // Update is called once per frame
@@ -31,8 +34,9 @@ public class SwordController : MonoBehaviour
             {
                 if (hit.transform.TryGetComponent(out Enemy enemy) && !hasDealtDamage.Contains(hit.transform.gameObject))
                 {
+                    CinemachineShake.Instance.ShakeCamera(4f, 0.5f);
                     Debug.Log("enemy hasar yedi");
-                    enemy.TakeDamage(weaponDamage);
+                    enemy.TakeDamage(playerStats.CalculateDamage());
                     hasDealtDamage.Add(hit.transform.gameObject);
                     DamageParticle(hit.point);
                 }
@@ -46,6 +50,7 @@ public class SwordController : MonoBehaviour
 
     public void DamageParticle(Vector3 pos)
     {
+       
         GameObject particle = Instantiate(damageParticle, pos, Quaternion.identity);
         Destroy(particle, 3f);
     }

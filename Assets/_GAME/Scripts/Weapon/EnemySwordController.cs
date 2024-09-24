@@ -1,4 +1,3 @@
-using Newtonsoft.Json.Bson;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -33,6 +32,7 @@ public class EnemySwordController : MonoBehaviour
                     {
                         Debug.Log("block");
                         health.Block();
+                        CinemachineShake.Instance.ShakeCamera(4f, 0.5f);
                     }
                     else
                     {
@@ -42,6 +42,8 @@ public class EnemySwordController : MonoBehaviour
                     hasDealtDamage=true;
 
                         DamageParticle(hit.point);
+                        CinemachineShake.Instance.ShakeCamera(4f, 0.5f);
+
 
                     }
                 }

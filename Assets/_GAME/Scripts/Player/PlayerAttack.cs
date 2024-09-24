@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class PlayerAttack : MonoBehaviour
 {
@@ -71,6 +72,20 @@ public class PlayerAttack : MonoBehaviour
             //sword.Attack();
             attackCount = 0;
         }
+    }
+
+    public void AttackButton()
+    {
+        attackTimer += Time.deltaTime;
+        attackCount++;
+
+
+        if (attackCount == 1)
+        {
+            playerAnimation.PlayAttack();
+            //sword.Attack();
+        }
+
     }
 
 }

@@ -8,11 +8,14 @@ public class LevelsManager : MonoBehaviour
     [SerializeField] private GameObject[] levels;
     private int currentLevel;
 
+
     [Header("Settings")]
     [SerializeField] private Camera camera;
     [SerializeField] private GameObject menuCamera;
     [SerializeField] private GameObject gameplayCamera;
     [SerializeField] private GameObject menuEnvo;
+    [SerializeField] private GameObject player;
+    [SerializeField] private Transform playerPos;
     [Header("SO")]
     [SerializeField] private EnemyPopUpSO[] enemySO;
     GameObject levelInstance;
@@ -28,8 +31,7 @@ public class LevelsManager : MonoBehaviour
 
         if (DataManager.instance.TryPurchaseGem(enemySO[currentLevel].enemyPrice))
         {
-
-            StartBattle();
+            player.gameObject.SetActive(false);
 
             //currentLevel = PlayerPrefs.GetInt("Level", 0);
             Debug.Log(currentLevel);
@@ -45,11 +47,12 @@ public class LevelsManager : MonoBehaviour
             {
                 yield return new WaitForSeconds(Time.deltaTime);
                 levelInstance.SetActive(true);
+            StartBattle();
             }
         }
         else
         {
-            Debug.Log("Yetersiz para");
+            StartCoroutine( UIManager.instance.popUpCreat("YOU DON'T HAVE ENOUGH GOLD. BUY FROM MARKET"));
         }
 
 
@@ -64,6 +67,9 @@ public class LevelsManager : MonoBehaviour
         menuEnvo.SetActive(false);
 
         DialogSystem.instance.DialogCreat(currentLevel);
+        player.transform.position = playerPos.transform.position;
+        player.gameObject.SetActive(true);
+
 
         camera.gameObject.transform.position = Vector3.Lerp(menuCamera.transform.position, gameplayCamera.transform.position, 3f);
     }
@@ -73,7 +79,6 @@ public class LevelsManager : MonoBehaviour
         menuCamera.gameObject.SetActive(true);
         menuEnvo.SetActive(true);
         Destroy(levelInstance);
-
     }
     public void SetLevel()
     {

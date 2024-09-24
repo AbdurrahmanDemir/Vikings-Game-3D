@@ -14,6 +14,8 @@ public class DataManager : MonoBehaviour
     [Header(" Data ")]
     [SerializeField] private int gem;
 
+    int number;
+
   
     private void Awake()
     {
@@ -25,13 +27,20 @@ public class DataManager : MonoBehaviour
         LoadData();
 
     }
-  
+
+    private void Start()
+    {
+
+        LaggedAPIUnity.Instance.CheckRewardAd();
+    }
+
 
     public bool TryPurchaseGem(int price)
     {
         if (price <= gem)
         {
             gem -= price;
+            SaveData();
             return true;
         }
 
@@ -65,5 +74,28 @@ public class DataManager : MonoBehaviour
         UpdateGemText();
     }
 
-   
+
+    public void Gold100()
+    {
+
+        LaggedAPIUnity.Instance.PlayRewardAd();
+        LaggedAPIUnity.Instance.CheckRewardAd();
+        AddGem(100);
+    }
+    public void Gold300()
+    {
+
+
+        LaggedAPIUnity.Instance.PlayRewardAd();
+        LaggedAPIUnity.Instance.CheckRewardAd();        
+        number += 1;
+
+        if (number == 2)
+        {
+            AddGem(300);
+        }
+
+
+    }
+
 }
