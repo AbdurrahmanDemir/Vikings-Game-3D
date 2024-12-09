@@ -1,3 +1,4 @@
+using DG.Tweening;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -29,6 +30,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject GameLosePanel;
     [SerializeField] private GameObject ShopPanel;
     [SerializeField] private GameObject InventoryPanel;
+    [SerializeField] private GameObject QuestPanel;
     [SerializeField] private GameObject StartTextPanel;
     [SerializeField] private GameObject _popUpPrefabs;
     [SerializeField] private TextMeshProUGUI _popUpPrefabsText;
@@ -50,6 +52,15 @@ public class UIManager : MonoBehaviour
 
     public GameObject platformPanel;
 
+    [Header("First Line Settings")]
+    public TextMeshProUGUI firstLineText; // Ýlk satýr için Text bileþeni
+    public float fadeInDuration = 2f;     // Yavaþça belirme süresi
+
+    [Header("Main Text Settings")]
+    public TextMeshProUGUI introText;     // Ana metin için Text bileþeni
+    public string mainText = "The harsh winds of the north and the dark nights of winter envelop the village of Skjoldr. For many years the village has lived in peace, protected from the shadow of war by its strong leaders. Now, however, the village leader, the old and respected Jarl Eirik, has died.\n\nAccording to village tradition, a new leader must be chosen. But only the most skilled and brave warriors of the village should be given this task. Eirik's death is a turning point that will decide the fate of the village.";
+    public float letterDelay = 0.05f;     // Harfler arasý gecikme süresi
+
     //public GameObject orientationPanel;
     //private bool isMobileDevice = false;
 
@@ -69,7 +80,11 @@ public class UIManager : MonoBehaviour
     {
 
         if (!PlayerPrefs.HasKey("FirstLogin"))
+        {
             StartTextPanel.SetActive(true);
+            StartCoroutine(ShowIntroSequence());
+
+        }
 
         if (!PlayerPrefs.HasKey("Platform"))
         {
@@ -100,78 +115,29 @@ public class UIManager : MonoBehaviour
                     levelButtons[i].gameObject.GetComponent<Image>().color = Color.gray; // Kilitli seviye rengi
                 }
             }
-        SaveAchievements(currentLevel);
+        //SaveAchievements(currentLevel);
 
 
     }
-    //private void Update()
-    //{
-    //    if (isMobileDevice)
-    //    {
-    //        CheckOrientation();
-
-    //    }
-    //}
-    //void CheckOrientation()
-    //{
-    //    if (Screen.orientation == ScreenOrientation.Portrait || Screen.orientation == ScreenOrientation.PortraitUpsideDown)
-    //    {
-    //        // Dikey modda paneli aç
-    //        orientationPanel.SetActive(true);
-    //    }
-    //    else if (Screen.orientation == ScreenOrientation.LandscapeLeft || Screen.orientation == ScreenOrientation.LandscapeRight)
-    //    {
-    //        // Yatay modda paneli kapat
-    //        orientationPanel.SetActive(false);
-    //    }
-    //}
-    void SaveAchievements(int currentLevel)
+    IEnumerator ShowIntroSequence()
     {
-        switch (currentLevel)
+        // Ýlk satýrý yavaþça belirginleþtir
+        firstLineText.DOFade(1, fadeInDuration);
+
+        // Ýlk satýrýn belirme süresi boyunca bekle
+        yield return new WaitForSeconds(fadeInDuration + 1f);
+
+        // Ana metni harf harf göster
+        yield return StartCoroutine(DisplayMainText());
+    }
+
+    IEnumerator DisplayMainText()
+    {
+        introText.text = "";
+        foreach (char letter in mainText)
         {
-            case 1:
-                LaggedAPIUnity.Instance.SaveAchievement("vikings_questpartt_mfqcy001");
-                Debug.Log("Level 1 achievement saved");
-                break;
-            case 2:
-                LaggedAPIUnity.Instance.SaveAchievement("vikings_questpartt_mfqcy002");
-                Debug.Log("Level 2 achievement saved");
-                break;
-            case 3:
-                LaggedAPIUnity.Instance.SaveAchievement("vikings_questpartt_mfqcy003");
-                Debug.Log("Level 3 achievement saved");
-                break;
-            case 4:
-                LaggedAPIUnity.Instance.SaveAchievement("vikings_questpartt_mfqcy004");
-                Debug.Log("Level 4 achievement saved");
-                break;
-            case 5:
-                LaggedAPIUnity.Instance.SaveAchievement("vikings_questpartt_mfqcy005");
-                Debug.Log("Level 5 achievement saved");
-                break;
-            case 6:
-                LaggedAPIUnity.Instance.SaveAchievement("vikings_questpartt_kznwx007");
-                Debug.Log("Level 6 achievement saved");
-                break;
-            case 7:
-                LaggedAPIUnity.Instance.SaveAchievement("vikings_questpartt_kznwx008");
-                Debug.Log("Level 7 achievement saved");
-                break;
-            case 8:
-                LaggedAPIUnity.Instance.SaveAchievement("vikings_questpartt_kznwx009");
-                Debug.Log("Level 8 achievement saved");
-                break;
-            case 9:
-                LaggedAPIUnity.Instance.SaveAchievement("vikings_questpartt_kznwx0010");
-                Debug.Log("Level 9 achievement saved");
-                break;
-            case 10:
-                LaggedAPIUnity.Instance.SaveAchievement("vikings_questpartt_kznwx0011");
-                Debug.Log("Level 10 achievement saved");
-                break;
-            default:
-                Debug.Log("No achievements for this level");
-                break;
+            introText.text += letter;
+            yield return new WaitForSeconds(letterDelay);
         }
     }
     public void GameUIStageChanged(UIStage stage)
@@ -235,7 +201,7 @@ public class UIManager : MonoBehaviour
     }
     public void EnemyPlayButton(int index)
     {
-        enemyPopUpPanel.SetActive(true);
+        EnemyPopUpPanelOff();
 
         EnemyPopUpSO enemy = enemySO[index];
 
@@ -246,28 +212,64 @@ public class UIManager : MonoBehaviour
         enemyPrice.text= enemy.enemyPrice.ToString();
 
     }
+    public void OpenQuestPanel()
+    {
+        if (QuestPanel.activeSelf)
+        {
+            QuestPanel.transform.DOScale(Vector3.zero, 0.2f).SetEase(Ease.InBack).OnComplete(() => QuestPanel.SetActive(false));
+        }
+        else
+        {
+            QuestPanel.SetActive(true);
+            QuestPanel.transform.localScale = Vector3.zero;
+            QuestPanel.transform.DOScale(Vector3.one, 0.2f).SetEase(Ease.OutBack);
+
+        }
+    }
     public void EnemyPopUpPanelOff()
     {
         if (enemyPopUpPanel.activeSelf)
-            enemyPopUpPanel.SetActive(false);
+        {
+            enemyPopUpPanel.transform.DOScale(Vector3.zero, 0.2f).SetEase(Ease.InBack).OnComplete(() => enemyPopUpPanel.SetActive(false));
+        }
         else
+        {
             enemyPopUpPanel.SetActive(true);
+            enemyPopUpPanel.transform.localScale = Vector3.zero;
+            enemyPopUpPanel.transform.DOScale(Vector3.one, 0.2f).SetEase(Ease.OutBack);
+
+        }
     }
+
 
     public void ShopPanelOff()
     {
         if (ShopPanel.activeSelf)
-            ShopPanel.SetActive(false);
+        {
+            ShopPanel.transform.DOScale(Vector3.zero, 0.2f).SetEase(Ease.InBack).OnComplete(() => ShopPanel.SetActive(false));
+        }
         else
+        {
             ShopPanel.SetActive(true);
+            ShopPanel.transform.localScale = Vector3.zero;
+            ShopPanel.transform.DOScale(Vector3.one, 0.2f).SetEase(Ease.OutBack);
+
+        }
     }
 
     public void InventoryPanelOff()
     {
         if (InventoryPanel.activeSelf)
-            InventoryPanel.SetActive(false);
+        {
+            InventoryPanel.transform.DOScale(Vector3.zero, 0.2f).SetEase(Ease.InBack).OnComplete(() => InventoryPanel.SetActive(false));
+        }
         else
+        {
             InventoryPanel.SetActive(true);
+            InventoryPanel.transform.localScale = Vector3.zero;
+            InventoryPanel.transform.DOScale(Vector3.one, 0.2f).SetEase(Ease.OutBack);
+
+        }
     }
     public void PlatformOff()
     {
@@ -290,7 +292,35 @@ public class UIManager : MonoBehaviour
         itemPanel.SetActive(true);
         itemShop.SetActive(false);
     }
+    public void OpenPopUp(string text)
+    {
+        if (_popUpPrefabs.activeSelf)
+        {
+            _popUpPrefabs.transform.DOScale(Vector3.zero, 0.2f)
+                .SetEase(Ease.InBack)
+                .OnComplete(() => _popUpPrefabs.SetActive(false));
+        }
+        else
+        {
+            _popUpPrefabs.SetActive(true);
+            _popUpPrefabs.transform.localScale = Vector3.zero;
+            _popUpPrefabsText.text = text;
+            _popUpPrefabs.transform.DOScale(Vector3.one, 0.2f)
+                .SetEase(Ease.OutBack)
+                .OnComplete(() => StartCoroutine(ClosePanelAfterDelay(1.8f)));
+        }
+    }
 
+    private IEnumerator ClosePanelAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay);
+        if (_popUpPrefabs.activeSelf)
+        {
+            _popUpPrefabs.transform.DOScale(Vector3.zero, 0.2f)
+                .SetEase(Ease.InBack)
+                .OnComplete(() => _popUpPrefabs.SetActive(false));
+        }
+    }
     public IEnumerator popUpCreat(string massage)
     {
 
@@ -300,5 +330,9 @@ public class UIManager : MonoBehaviour
         yield return new WaitForSeconds(1.8f);
         _popUpPrefabs.SetActive(false);
 
+    }
+    public void DiscordLink()
+    {
+        Application.OpenURL("https://discord.gg/npmtDMbfC3");
     }
 }

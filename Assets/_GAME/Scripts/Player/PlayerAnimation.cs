@@ -95,6 +95,8 @@ public class PlayerAnimation : MonoBehaviour
     public void playIdleAnimation()
     {
         animator.Play("Idle");
+        animator.SetFloat("Attack1", 0f);
+       
     }
     public void PlayAttack()
     {

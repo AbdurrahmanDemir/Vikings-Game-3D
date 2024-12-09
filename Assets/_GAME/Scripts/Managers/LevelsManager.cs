@@ -1,3 +1,5 @@
+using CrazyGames;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -20,6 +22,8 @@ public class LevelsManager : MonoBehaviour
     [SerializeField] private EnemyPopUpSO[] enemySO;
     GameObject levelInstance;
 
+    public static Action onPlayNumber;
+
     //private void Start()
     //{
     //    LoadLevel();
@@ -32,6 +36,16 @@ public class LevelsManager : MonoBehaviour
         if (DataManager.instance.TryPurchaseGem(enemySO[currentLevel].enemyPrice))
         {
             player.gameObject.SetActive(false);
+
+            CrazySDK.Ad.RequestAd(CrazyAdType.Midgame, () =>
+            {
+                /** ad started */
+            }, (error) =>
+            {
+            }, () =>
+            {
+            });
+
 
             //currentLevel = PlayerPrefs.GetInt("Level", 0);
             Debug.Log(currentLevel);
@@ -52,7 +66,8 @@ public class LevelsManager : MonoBehaviour
         }
         else
         {
-            StartCoroutine( UIManager.instance.popUpCreat("YOU DON'T HAVE ENOUGH GOLD. BUY FROM MARKET"));
+            UIManager.instance.OpenPopUp("YOU DON'T HAVE ENOUGH GOLD. BUY FROM MARKET");
+            UIManager.instance.ShopPanelOff();
         }
 
 
@@ -61,6 +76,8 @@ public class LevelsManager : MonoBehaviour
     }
     public void StartBattle()
     {
+        onPlayNumber?.Invoke();
+
         camera.gameObject.SetActive(false);
         UIManager.instance.GameUIStageChanged(UIStage.Game);
         menuCamera.gameObject.SetActive(false);

@@ -1,3 +1,4 @@
+using CrazyGames;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -26,12 +27,14 @@ public class DataManager : MonoBehaviour
 
         LoadData();
 
-    }
-
-    private void Start()
-    {
-
-        LaggedAPIUnity.Instance.CheckRewardAd();
+        if (CrazySDK.IsAvailable)
+        {
+            CrazySDK.Init(() =>
+            {
+                Debug.Log("CrazySDK initialized");
+                CrazySDK.Game.GameplayStart();
+            });
+        }
     }
 
 
@@ -40,7 +43,7 @@ public class DataManager : MonoBehaviour
         if (price <= gem)
         {
             gem -= price;
-            SaveData();
+            SaveData(); UpdateGemText();
             return true;
         }
 
@@ -75,25 +78,58 @@ public class DataManager : MonoBehaviour
     }
 
 
+
     public void Gold100()
     {
-
-        LaggedAPIUnity.Instance.PlayRewardAd();
-        LaggedAPIUnity.Instance.CheckRewardAd();
-        AddGem(100);
+        CrazySDK.Ad.RequestAd(CrazyAdType.Rewarded, () =>
+        {
+            /** ad started */
+        }, (error) =>
+        {
+            /** ad error */
+        }, () =>
+        {
+            AddGem(100);
+        });
+        
     }
     public void Gold300()
     {
-
-
-        LaggedAPIUnity.Instance.PlayRewardAd();
-        LaggedAPIUnity.Instance.CheckRewardAd();        
-        number += 1;
-
-        if (number == 2)
+        CrazySDK.Ad.RequestAd(CrazyAdType.Rewarded, () =>
         {
-            AddGem(300);
-        }
+            /** ad started */
+        }, (error) =>
+        {
+            /** ad error */
+        }, () =>
+        {
+            number += 1;
+
+            if (number == 2)
+            {
+                AddGem(300);
+            }
+        });
+        
+
+
+    }
+
+    public void Gold50()
+    {
+        CrazySDK.Ad.RequestAd(CrazyAdType.Rewarded, () =>
+        {
+            /** ad started */
+        }, (error) =>
+        {
+            /** ad error */
+        }, () =>
+        {
+            
+                AddGem(50);
+            
+        });
+
 
 
     }

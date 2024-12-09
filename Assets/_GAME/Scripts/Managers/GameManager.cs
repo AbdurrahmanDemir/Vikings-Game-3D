@@ -1,7 +1,10 @@
 
+using CrazyGames;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using static Cinemachine.DocumentationSortingAttribute;
@@ -17,14 +20,19 @@ public class GameManager : MonoBehaviour
     [SerializeField] private GameObject player;
     [SerializeField] private Transform playerStartPos;
 
+    public static Action onGameWin;
+    public static Action onLogIn;
+
     int levelGold;
     private void Start()
     {
-        LaggedAPIUnity.Instance.CheckRewardAd();
+        onLogIn?.Invoke();
     }
     public void GameWin()
     {
         UIManager.instance.GameUIStageChanged(UIStage.GameWin);
+
+        onGameWin?.Invoke();
 
         int level = PlayerPrefs.GetInt("Level");
 
@@ -40,24 +48,44 @@ public class GameManager : MonoBehaviour
 
     public void ClaimButton()
     {
-        UIManager.instance.GameUIStageChanged(UIStage.Menu);
-        levelManager.EndBattle();
+        
 
-        LaggedAPIUnity.Instance.ShowAd();
-
+        CrazySDK.Ad.RequestAd(CrazyAdType.Midgame, () =>
+        {
+            /** ad started */
+        }, (error) =>
+        {
+            UIManager.instance.GameUIStageChanged(UIStage.Menu);
+            levelManager.EndBattle();
+            SceneManager.LoadScene(0);
+        }, () =>
+        {
+            UIManager.instance.GameUIStageChanged(UIStage.Menu);
+            levelManager.EndBattle();
         SceneManager.LoadScene(0);
+        });
+
     }
     public void Claim2XButton()
     {
 
-        LaggedAPIUnity.Instance.PlayRewardAd();
+        CrazySDK.Ad.RequestAd(CrazyAdType.Rewarded, () =>
+        {
+            /** ad started */
+        }, (error) =>
+        {
+            /** ad error */
+        }, () =>
+        {
+            UIManager.instance.GameUIStageChanged(UIStage.Menu);
 
-        UIManager.instance.GameUIStageChanged(UIStage.Menu);
-     
-        DataManager.instance.AddGem(levelGold);
-        levelManager.EndBattle();
+            DataManager.instance.AddGem(levelGold);
+            levelManager.EndBattle();
 
-        SceneManager.LoadScene(0);
+            SceneManager.LoadScene(0);
+        });
+
+        
     }
 
     public void GameLose()
@@ -70,14 +98,23 @@ public class GameManager : MonoBehaviour
     public void Lose2XButton()
     {
 
-        LaggedAPIUnity.Instance.PlayRewardAd();
+        CrazySDK.Ad.RequestAd(CrazyAdType.Rewarded, () =>
+        {
+            /** ad started */
+        }, (error) =>
+        {
+            /** ad error */
+        }, () =>
+        {
+            UIManager.instance.GameUIStageChanged(UIStage.Menu);
 
-        UIManager.instance.GameUIStageChanged(UIStage.Menu);
+            DataManager.instance.AddGem(50);
+            levelManager.EndBattle();
 
-        DataManager.instance.AddGem(50);
-        levelManager.EndBattle();
+            SceneManager.LoadScene(0);
+        });
 
-        SceneManager.LoadScene(0);
+        
     }
 
 }
