@@ -107,11 +107,13 @@ public class PlayerAnimation : MonoBehaviour
     {
         animator.SetLayerWeight(1, 1);
         animator.Play("Attack2");
+        UIManager.instance.ShowCombatMultiplier(2);
     }
     public void PlayAttackCombo2()
     {
         animator.SetLayerWeight(1, 1);
         animator.Play("Attack3");
+        UIManager.instance.ShowCombatMultiplier(3);
     }
 
 }

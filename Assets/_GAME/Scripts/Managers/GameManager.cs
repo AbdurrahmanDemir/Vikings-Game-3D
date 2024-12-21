@@ -1,5 +1,5 @@
 
-using CrazyGames;
+//using CrazyGames;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -50,42 +50,44 @@ public class GameManager : MonoBehaviour
     {
         
 
-        CrazySDK.Ad.RequestAd(CrazyAdType.Midgame, () =>
-        {
-            /** ad started */
-        }, (error) =>
-        {
-            UIManager.instance.GameUIStageChanged(UIStage.Menu);
-            levelManager.EndBattle();
-            SceneManager.LoadScene(0);
-        }, () =>
-        {
-            UIManager.instance.GameUIStageChanged(UIStage.Menu);
-            levelManager.EndBattle();
+        //CrazySDK.Ad.RequestAd(CrazyAdType.Midgame, () =>
+        //{
+        //    /** ad started */
+        //}, (error) =>
+        //{
+           
+        //}, () =>
+        //{
+        //    UIManager.instance.GameUIStageChanged(UIStage.Menu);
+        //    levelManager.EndBattle();
+        //SceneManager.LoadScene(0);
+        //});
+
+        UIManager.instance.GameUIStageChanged(UIStage.Menu);
+        levelManager.EndBattle();
         SceneManager.LoadScene(0);
-        });
 
     }
     public void Claim2XButton()
     {
 
-        CrazySDK.Ad.RequestAd(CrazyAdType.Rewarded, () =>
-        {
-            /** ad started */
-        }, (error) =>
-        {
-            /** ad error */
-        }, () =>
-        {
-            UIManager.instance.GameUIStageChanged(UIStage.Menu);
+        //CrazySDK.Ad.RequestAd(CrazyAdType.Rewarded, () =>
+        //{
+        //    /** ad started */
+        //}, (error) =>
+        //{
+        //    /** ad error */
+        //}, () =>
+        //{
+            
+        //});
+        UIManager.instance.GameUIStageChanged(UIStage.Menu);
 
-            DataManager.instance.AddGem(levelGold);
-            levelManager.EndBattle();
+        DataManager.instance.AddGem(levelGold);
+        levelManager.EndBattle();
 
-            SceneManager.LoadScene(0);
-        });
+        SceneManager.LoadScene(0);
 
-        
     }
 
     public void GameLose()
@@ -98,23 +100,23 @@ public class GameManager : MonoBehaviour
     public void Lose2XButton()
     {
 
-        CrazySDK.Ad.RequestAd(CrazyAdType.Rewarded, () =>
-        {
-            /** ad started */
-        }, (error) =>
-        {
-            /** ad error */
-        }, () =>
-        {
-            UIManager.instance.GameUIStageChanged(UIStage.Menu);
+        //CrazySDK.Ad.RequestAd(CrazyAdType.Rewarded, () =>
+        //{
+        //    /** ad started */
+        //}, (error) =>
+        //{
+        //    /** ad error */
+        //}, () =>
+        //{
+            
+        //});
+        UIManager.instance.GameUIStageChanged(UIStage.Menu);
 
-            DataManager.instance.AddGem(50);
-            levelManager.EndBattle();
+        DataManager.instance.AddGem(50);
+        levelManager.EndBattle();
 
-            SceneManager.LoadScene(0);
-        });
+        SceneManager.LoadScene(0);
 
-        
     }
 
 }

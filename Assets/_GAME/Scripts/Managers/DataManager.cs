@@ -1,4 +1,4 @@
-using CrazyGames;
+//using CrazyGames;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -27,14 +27,14 @@ public class DataManager : MonoBehaviour
 
         LoadData();
 
-        if (CrazySDK.IsAvailable)
-        {
-            CrazySDK.Init(() =>
-            {
-                Debug.Log("CrazySDK initialized");
-                CrazySDK.Game.GameplayStart();
-            });
-        }
+        //if (CrazySDK.IsAvailable)
+        //{
+        //    CrazySDK.Init(() =>
+        //    {
+        //        Debug.Log("CrazySDK initialized");
+        //        CrazySDK.Game.GameplayStart();
+        //    });
+        //}
     }
 
 
@@ -81,54 +81,54 @@ public class DataManager : MonoBehaviour
 
     public void Gold100()
     {
-        CrazySDK.Ad.RequestAd(CrazyAdType.Rewarded, () =>
-        {
-            /** ad started */
-        }, (error) =>
-        {
-            /** ad error */
-        }, () =>
-        {
-            AddGem(100);
-        });
-        
+        //CrazySDK.Ad.RequestAd(CrazyAdType.Rewarded, () =>
+        //{
+        //    /** ad started */
+        //}, (error) =>
+        //{
+        //    /** ad error */
+        //}, () =>
+        //{
+        //    AddGem(100);
+        //});
+        AddGem(100);
     }
     public void Gold300()
     {
-        CrazySDK.Ad.RequestAd(CrazyAdType.Rewarded, () =>
-        {
-            /** ad started */
-        }, (error) =>
-        {
-            /** ad error */
-        }, () =>
-        {
-            number += 1;
+        //CrazySDK.Ad.RequestAd(CrazyAdType.Rewarded, () =>
+        //{
+        //    /** ad started */
+        //}, (error) =>
+        //{
+        //    /** ad error */
+        //}, () =>
+        //{
+        //    number += 1;
 
-            if (number == 2)
-            {
-                AddGem(300);
-            }
-        });
-        
+        //    if (number == 2)
+        //    {
+        //        AddGem(300);
+        //    }
+        //});
 
+        AddGem(300);
 
     }
 
     public void Gold50()
     {
-        CrazySDK.Ad.RequestAd(CrazyAdType.Rewarded, () =>
-        {
-            /** ad started */
-        }, (error) =>
-        {
-            /** ad error */
-        }, () =>
-        {
+        //CrazySDK.Ad.RequestAd(CrazyAdType.Rewarded, () =>
+        //{
+        //    /** ad started */
+        //}, (error) =>
+        //{
+        //    /** ad error */
+        //}, () =>
+        //{
             
-                AddGem(50);
+        //        AddGem(50);
             
-        });
+        //});
 
 
 

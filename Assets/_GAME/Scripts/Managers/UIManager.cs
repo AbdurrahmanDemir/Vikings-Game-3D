@@ -34,6 +34,7 @@ public class UIManager : MonoBehaviour
     [SerializeField] private GameObject StartTextPanel;
     [SerializeField] private GameObject _popUpPrefabs;
     [SerializeField] private TextMeshProUGUI _popUpPrefabsText;
+    [SerializeField] private GameObject _keyTutorialPanel;
     [Header("SO")]
     [SerializeField] private EnemyPopUpSO[] enemySO;
     [SerializeField] private GameObject enemyPopUpPanel;
@@ -42,6 +43,11 @@ public class UIManager : MonoBehaviour
     public TextMeshProUGUI enemyName;
     public TextMeshProUGUI enemyTitle;
     public TextMeshProUGUI enemyPrice;
+
+    [Header("CombatSystem")]
+    [SerializeField] private GameObject combatPrefabs;
+    [SerializeField] private TextMeshProUGUI combatText;
+
 
     [Header("Buttons")]
     public GameObject[] levelButtons;
@@ -271,6 +277,21 @@ public class UIManager : MonoBehaviour
 
         }
     }
+    public void KeyTutorialPanelOff()
+    {
+        if (_keyTutorialPanel.activeSelf)
+        {
+            _keyTutorialPanel.transform.DOScale(Vector3.zero, 0.2f).SetEase(Ease.InBack).OnComplete(() => _keyTutorialPanel.SetActive(false));
+        }
+        else
+        {
+            _keyTutorialPanel.SetActive(true);
+            _keyTutorialPanel.transform.localScale = Vector3.zero;
+            _keyTutorialPanel.transform.DOScale(Vector3.one, 0.2f).SetEase(Ease.OutBack);
+
+        }
+    }
+
     public void PlatformOff()
     {
         if (platformPanel.activeSelf)
@@ -331,6 +352,26 @@ public class UIManager : MonoBehaviour
         _popUpPrefabs.SetActive(false);
 
     }
+
+    public void ShowCombatMultiplier(int multiplier)
+    {
+        combatPrefabs.SetActive(true);
+
+        combatText.text = "COMBAT x" + multiplier;
+
+        // Text'i sýfýr saydamlýkla baþlat
+        combatText.alpha = 0;
+
+        // Text'i görünür hale getir ve bir süre sonra kaybolmasýný saðla
+        combatText.DOFade(1, 0.5f)      // 0.5 saniyede görünür hale gelir
+                  .OnComplete(() =>
+                  {
+                      // 1 saniye bekledikten sonra tekrar kaybol
+                      combatText.DOFade(0, 0.5f).SetDelay(1f);
+                      combatPrefabs.SetActive(false);
+                  });
+    }
+
     public void DiscordLink()
     {
         Application.OpenURL("https://discord.gg/npmtDMbfC3");

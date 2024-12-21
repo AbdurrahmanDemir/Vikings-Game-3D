@@ -1,4 +1,4 @@
-using CrazyGames;
+//using CrazyGames;
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -37,14 +37,14 @@ public class LevelsManager : MonoBehaviour
         {
             player.gameObject.SetActive(false);
 
-            CrazySDK.Ad.RequestAd(CrazyAdType.Midgame, () =>
-            {
-                /** ad started */
-            }, (error) =>
-            {
-            }, () =>
-            {
-            });
+            //CrazySDK.Ad.RequestAd(CrazyAdType.Midgame, () =>
+            //{
+            //    /** ad started */
+            //}, (error) =>
+            //{
+            //}, () =>
+            //{
+            //});
 
 
             //currentLevel = PlayerPrefs.GetInt("Level", 0);
